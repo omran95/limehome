@@ -61,8 +61,20 @@ export class HotelsController {
   }
   @Get(':hotelId/bookings')
   async getBookings(@Param('hotelId') hotelID) {
-    const bookingsDto = await this.hotelApplicationService.getBookings(hotelID);
-    return bookingsDto.getDto();
+    try {
+      const bookingsDto = await this.hotelApplicationService.getBookings(
+        hotelID,
+      );
+      return bookingsDto.getDto();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error.message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Post(':hotelId/bookings')
