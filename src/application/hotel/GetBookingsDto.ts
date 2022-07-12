@@ -7,6 +7,7 @@ export class GetBookingsDto {
   }
   getDto(): any[] {
     return this.bookings.map((booking: Booking) => ({
+      id: booking.getID(),
       checkinDate: booking.getCheckinDate(),
       checkoutDate: booking.getCheckoutDate(),
       amount: booking.getAmount(),

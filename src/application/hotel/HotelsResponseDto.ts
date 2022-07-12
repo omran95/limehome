@@ -7,10 +7,10 @@ export class HotelsResponseDto {
   }
   getDto(): any[] {
     return this.hotels.map((hotel: Hotel) => ({
+      ...(hotel.id ? { id: hotel.getID() } : {}),
       name: hotel.getName(),
       address: hotel.getAddress(),
       location: hotel.getLocation(),
-      ...(hotel.id ? { id: hotel.getID() } : {}),
     }));
   }
 }

@@ -78,6 +78,10 @@ export class Booking {
     return this.amount;
   }
 
+  public getID(): string {
+    return this.id;
+  }
+
   private setDateInterval() {
     this.dateInterval = new DateInterval(this.checkinDate, this.checkoutDate);
   }
