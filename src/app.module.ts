@@ -16,7 +16,7 @@ import { Booking } from './domain/entities/Booking';
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      ssl: true,
+      ssl: { rejectUnauthorized: false },
       entities: [Hotel, Booking],
       synchronize: true,
     }),
