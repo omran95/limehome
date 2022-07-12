@@ -86,7 +86,7 @@ export class Booking {
     return this.dateInterval.getAllIncludedDates();
   }
 
-  private hasDate(date: string): boolean {
+  public hasDate(date: string): boolean {
     const currentBookingCheckinDate = Date.parse(this.checkinDate);
     const currentBookingCheckoutDate = Date.parse(this.checkoutDate);
 
@@ -99,12 +99,5 @@ export class Booking {
       return true;
     }
     return false;
-  }
-
-  public getOverlappingBookigsAtDate(
-    date: string,
-    bookings: Booking[],
-  ): Booking[] {
-    return bookings.filter((booking: Booking) => booking.hasDate(date));
   }
 }

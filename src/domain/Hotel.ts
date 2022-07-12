@@ -77,6 +77,10 @@ export class Hotel {
     }
   }
 
+  private getAllBookingsAtDate(date: string): Booking[] {
+    return this.bookings.filter((booking: Booking) => booking.hasDate(date));
+  }
+
   private isValidBooking(booking: Booking): boolean {
     const allIncludedDates = booking.getAllIncludedDates();
     for (
@@ -85,7 +89,7 @@ export class Hotel {
       i++
     ) {
       const allCurrentBookingsAtCurrentDay =
-        booking.getOverlappingBookigsAtDate(currentDate, this.bookings);
+        this.getAllBookingsAtDate(currentDate);
       if (allCurrentBookingsAtCurrentDay.length > MAX_BOOKINGS_PER_NIGHT - 1) {
         return false;
       }
