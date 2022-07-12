@@ -1,31 +1,63 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { AddHotelsDto } from 'src/application/hotel/AddHotelsDto';
 import { CreateBookingDto } from 'src/application/hotel/CreateBookingDto';
+import { DiscoverDto } from 'src/application/hotel/DiscoverDto';
 import { HotelApplicationService } from 'src/application/hotel/HotelApplicationService';
 
 @Controller('hotels')
 export class HotelsController {
   constructor(private hotelApplicationService: HotelApplicationService) {}
 
-  @Get()
-  async discover(@Query('location') location: string) {
-    if (!location) {
-      throw new Error('location must be provided!');
+  @Get('discover')
+  async discover(@Query() discoverDto: DiscoverDto) {
+    try {
+      const hotelsResponseDto = await this.hotelApplicationService.discover(
+        discoverDto,
+      );
+      return hotelsResponseDto.getDto();
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'location must be provided!',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    const [lat, lng] = location.split(',');
-    const hotelsResponseDto =
-      await this.hotelApplicationService.getHotelsByLatLng(lat, lng);
+  }
+
+  @Get()
+  async getHotles() {
+    const hotelsResponseDto = await this.hotelApplicationService.getHotels();
     return hotelsResponseDto.getDto();
   }
 
   @Post()
-  async addHotels(@Query('location') location: string) {
-    if (!location) {
-      throw new Error('location must be provided!');
+  async addHotels(@Query() addHotelsDto: AddHotelsDto) {
+    try {
+      const hotelsResponseDto =
+        await this.hotelApplicationService.createHotelsByLatLng(addHotelsDto);
+      const createdHotels = hotelsResponseDto.getDto();
+      return { message: 'hotels added successfully!', hotels: createdHotels };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error.message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    const [lat, lng] = location.split(',');
-    const hotelsResponseDto =
-      await this.hotelApplicationService.createHotelsByLatLng(lat, lng);
-    return hotelsResponseDto.getDto();
   }
   @Get(':hotelId/bookings')
   async getBookings(@Param('hotelId') hotelID) {
@@ -38,7 +70,20 @@ export class HotelsController {
     @Param('hotelId') hotelID,
     @Body() createBookingDto: CreateBookingDto,
   ) {
-    await this.hotelApplicationService.createBooking(hotelID, createBookingDto);
-    return { message: 'Booking created successfully!' };
+    try {
+      await this.hotelApplicationService.createBooking(
+        hotelID,
+        createBookingDto,
+      );
+      return { message: 'Booking created successfully!' };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: error.message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

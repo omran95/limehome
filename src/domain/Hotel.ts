@@ -12,9 +12,9 @@ import {
 } from 'typeorm';
 import { Invariant } from './Invariant';
 
-const MAX_BOOKINGS_PER_NIGHT = 10;
-const ONE_NIGHT_CANNOT_HAVE_MORE_THAN_TEN_BOOKINGS =
-  "Hotel can't has more than 10 bookings per night";
+export const MAX_BOOKINGS_PER_NIGHT = 10;
+export const ONE_NIGHT_CANNOT_HAVE_MORE_THAN_TEN_BOOKINGS =
+  "Hotel can't have more than 10 bookings per night";
 
 @Entity()
 export class Hotel {
@@ -93,7 +93,7 @@ export class Hotel {
     return true;
   }
 
-  addBoking(booking: Booking) {
+  addBooking(booking: Booking) {
     if (!this.isValidBooking(booking)) {
       new Invariant(ONE_NIGHT_CANNOT_HAVE_MORE_THAN_TEN_BOOKINGS).throw();
     }

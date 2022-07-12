@@ -9,6 +9,8 @@ import { CreateBookingDto } from './CreateBookingDto';
 import { Booking } from 'src/domain/entities/Booking';
 import { Guest } from 'src/domain/valueObjects/Guest';
 import { GetBookingsDto } from './GetBookingsDto';
+import { DiscoverDto } from './DiscoverDto';
+import { AddHotelsDto } from './AddHotelsDto';
 
 @Injectable()
 export class HotelApplicationService {
@@ -17,24 +19,33 @@ export class HotelApplicationService {
     private hotelRepo: Repository<Hotel>,
     @Inject('IMaps') private readonly mapsAPI: IMaps,
   ) {}
-  async getHotelsByLatLng(
-    lat: string,
-    lng: string,
-  ): Promise<HotelsResponseDto> {
-    const location: Location = new Location(lat, lng);
+  async discover(discoverDto: DiscoverDto): Promise<HotelsResponseDto> {
+    const { location } = discoverDto;
+    const [lat, lng] = location.split(',');
+    const hotelsLocatoin: Location = new Location(lat, lng);
     const hotelsNearLocation = await this.mapsAPI.getHotelsNearLocation(
-      location,
+      hotelsLocatoin,
     );
     return new HotelsResponseDto(hotelsNearLocation);
   }
+
+  async getHotels(): Promise<HotelsResponseDto> {
+    const hotels = await this.hotelRepo.find();
+    return new HotelsResponseDto(hotels);
+  }
+
   async createHotelsByLatLng(
-    lat: string,
-    lng: string,
+    addHotelsDto: AddHotelsDto,
   ): Promise<HotelsResponseDto> {
-    const location: Location = new Location(lat, lng);
+    const { location } = addHotelsDto;
+    const [lat, lng] = location.split(',');
+    const hotelsLocatoin: Location = new Location(lat, lng);
     const hotelsNearLocation = await this.mapsAPI.getHotelsNearLocation(
-      location,
+      hotelsLocatoin,
     );
+    if (hotelsNearLocation.length === 0) {
+      throw new Error("Didn't find any hotels with this location");
+    }
     await this.hotelRepo.save(hotelsNearLocation);
     return new HotelsResponseDto(hotelsNearLocation);
   }
@@ -58,7 +69,7 @@ export class HotelApplicationService {
       bookingGuest,
       amount,
     );
-    hotel.addBoking(booking);
+    hotel.addBooking(booking);
     await this.hotelRepo.save(hotel);
   }
   async getBookings(hotelID: string): Promise<GetBookingsDto> {
