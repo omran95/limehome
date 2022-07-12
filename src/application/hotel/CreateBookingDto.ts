@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEmail, IsISO8601 } from 'class-validator';
+import { IsNotEmpty, IsEmail, IsISO8601, IsPhoneNumber } from 'class-validator';
 
 export class CreateBookingDto {
   @IsISO8601()
@@ -16,6 +16,6 @@ export class CreateBookingDto {
   @IsEmail()
   public guestEmail: string;
 
-  @IsNotEmpty()
+  @IsPhoneNumber('DE')
   public guestPhoneNumber: string;
 }
