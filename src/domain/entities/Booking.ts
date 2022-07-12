@@ -4,10 +4,10 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { Hotel } from '../Hotel';
 import { Invariant } from '../Invariant';
 
-const BOOKING_CHECKIN_DATE_CANNOT_BE_IN_THE_PAST =
+export const BOOKING_CHECKIN_DATE_CANNOT_BE_IN_THE_PAST =
   'Booking checkin date can not be in the past';
 
-const BOOKING_CHECKOUT_DATE_CANNOT_PERCEDE_CHECKIN_DATE =
+export const BOOKING_CHECKOUT_DATE_CANNOT_PERCEDE_CHECKIN_DATE =
   'Booking checkout date can not precede checkin date';
 
 @Entity()
@@ -67,7 +67,7 @@ export class Booking {
   }
 
   public getCheckoutDate(): string {
-    return this.checkinDate;
+    return this.checkoutDate;
   }
 
   public getGuest(): Guest {

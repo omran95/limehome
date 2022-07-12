@@ -6,17 +6,17 @@ describe('Hotel Domain Model', () => {
   describe('addBooking', () => {
     it('should successfully add booking', () => {
       const hotel = HotelFactory.build();
-      const booking = BookingFactory.build('2022-08-10', '2022-08-12');
+      const booking = BookingFactory.build('2022-09-10', '2022-09-12');
       hotel.addBooking(booking);
       expect(hotel.getBookings()).toHaveLength(1);
     });
     it('should fail to add booking with a date that has 10 bookings', () => {
       const hotel = HotelFactory.build();
       for (let i = 0; i < 10; i++) {
-        const booking = BookingFactory.build('2022-08-10', '2022-08-12');
+        const booking = BookingFactory.build('2022-09-10', '2022-09-12');
         hotel.addBooking(booking);
       }
-      const booking = BookingFactory.build('2022-08-12', '2022-08-13');
+      const booking = BookingFactory.build('2022-09-12', '2022-09-13');
       expect(() => {
         hotel.addBooking(booking);
       }).toThrowError(ONE_NIGHT_CANNOT_HAVE_MORE_THAN_TEN_BOOKINGS);
