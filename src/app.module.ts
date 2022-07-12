@@ -14,6 +14,7 @@ import { Booking } from './domain/entities/Booking';
     ConfigModule.forRoot(),
     HttpModule,
     TypeOrmModule.forRoot({
+      type: 'postgres',
       url: process.env.DATABASE_URL,
       entities: [Hotel, Booking],
       synchronize: true,
