@@ -13,7 +13,9 @@ export class Here implements IMaps {
       data: { items: hotelsNearLocation = [] },
     } = await this.httpService
       .get(
-        `https://discover.search.hereapi.com/v1/discover?in=circle:${location.getLocationFormatted()};r=500&q=hotels&apiKey=1RUKbEMR1ifN_72t1aPw3p_P0WTr9r_P9B6DDwbc0Cw`,
+        `https://discover.search.hereapi.com/v1/discover?in=circle:${location.getLocationFormatted()};r=500&q=hotels&apiKey=${
+          process.env.HERE_API_KEY
+        }`,
       )
       .toPromise();
     return hotelsNearLocation.map((hotel) => {
