@@ -72,7 +72,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 Nest is [MIT licensed](LICENSE).
 
-## A few basic things that would improve the perfroamcne a bit
+## A few basic things that would improve the performance a bit
 
 - Add index on the hotelId (foreign key) on the bookings table
-- When adding booking to an hotel we fetch the hotel with all bookings but a better way would be ignoring the bookings that already ended (checkin & checkout dates are in the past)
+- When adding a booking to an hotel we fetch the hotel with all bookings but a better way would be ignoring the bookings that already ended (checkin & checkout dates are in the past)
